@@ -205,3 +205,6 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+chronic_kidney_disease_info.txt
+chronic_kindey_disease.csv
