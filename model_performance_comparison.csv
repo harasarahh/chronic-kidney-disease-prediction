@@ -1,0 +1,7 @@
+,accuracy,sensitivity,specificity,precision,f1_score
+knn_k5 (baseline),0.9825,0.963,1.0,1.0,0.9811
+logistic_regression,0.9825,0.963,1.0,1.0,0.9811
+random_forest_50,1.0,1.0,1.0,1.0,1.0
+random_forest_100,1.0,1.0,1.0,1.0,1.0
+random_forest_150,1.0,1.0,1.0,1.0,1.0
+svm,1.0,1.0,1.0,1.0,1.0
