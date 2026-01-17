@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCIENTIFIC PROGRAMMING - CKD</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.5)), 
+                              url("https://www.medicalindependent.ie/wp-content/uploads/2024/09/CKD-image.png");
+            background-size: cover;
+            background-attachment: fixed;
+            margin-bottom: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: left;
+            width: 95%;
+            max-width: 1000px;
+            height: auto;
+            padding-bottom: 50px;
+        }
+        .section {
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+        }
+        .section h2 {
+            color: #DB8493;
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 60px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: none;
+            background-color: white;
+            color: black;
+            font-family: 'Poppins', sans-serif;
+        }
+        label {
+            display: block;
+            text-align: left;
+            font-size: 13px;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+        button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #DB8493, #D64F5F);
+            border: none;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            cursor: pointer;
+            border-radius: 10px;
+            margin-top: 50px;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(219, 132, 147, 0.3);
+        }
+        button:hover {
+            transform: scale(1.01);
+            filter: brightness(1.1);
+        }
+        #result-box {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            display: none;
+            font-weight: 600;
+            font-size: 22px;
+        }
+        .metrics-banner {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(219, 132, 147, 0.4);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        }
+        .metric-item { text-align: center; }
+        .metric-label { display: block; font-size: 10px; text-transform: uppercase; color: #DB8493; font-weight: 600; margin-bottom: 2px; }
+        .metric-value { font-size: 16px; font-weight: 600; color: #fff; }
+        .model-name { border-right: 1px solid rgba(255,255,255,0.2); padding-right: 20px; margin-right: 10px; color: #fff; font-weight: 600; display: flex; align-items: center; }
+    </style>
+</head>
+<body>
+    <h1 style="margin: 60px 0 10px 0; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); text-align: center;">
+        Chronic Kidney Disease Prediction 
+    </h1>
+    <div class="metrics-banner">
+        <div class="model-name">Logistic Regression</div>
+        <div class="metric-item">
+            <span class="metric-label">Accuracy</span>
+            <span class="metric-value">0.9825</span>
+        </div>
+        <div class="metric-item">
+            <span class="metric-label">Sensitivity</span>
+            <span class="metric-value">0.963</span>
+        </div>
+        <div class="metric-item">
+            <span class="metric-label">Specificity</span>
+            <span class="metric-value">1.0</span>
+        </div>
+        <div class="metric-item">
+            <span class="metric-label">Precision</span>
+            <span class="metric-value">1.0</span>
+        </div>
+        <div class="metric-item">
+            <span class="metric-label">F1 Score</span>
+            <span class="metric-value">0.9811</span>
+        </div>
+    </div>
+    <form class="container" onsubmit="predict(event)">
+        <div class="section">
+            <h2>1. Patient Info and Vital Signs</h2>
+            <div class="grid-layout">
+                <div class="input-group">
+                    <label>Age (years)</label>
+                    <input id="age" name="age" type="number" min="1" max="110" placeholder="e.g. 51" required>
+                    <label>Pedal Edema</label>
+                    <select id="pedal_edema" name="pedal_edema">
+                        <option value="no" selected>No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Blood Pressure (mm/Hg)</label>
+                    <input id="blood_pressure" name="blood_pressure" type="number" min="50" max="180" placeholder="e.g. 76" required>
+                </div>
+                <div class="input-group">
+                    <label>Appetite</label>
+                    <select id="appetite" name="appetite">
+                        <option value="good" selected>Good</option>
+                        <option value="poor">Poor</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>2. Medical History</h2>
+            <div class="grid-layout">
+                <div class="input-group">
+                    <label>Hypertension</label>
+                    <select id="hypertension" name="hypertension">
+                        <option value="no" selected>No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                    <label>Anemia</label>
+                    <select id="anemia" name="anemia">
+                        <option value="no" selected>No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Diabetes Mellitus</label>
+                    <select id="diabetes_mellitus" name="diabetes_mellitus">
+                        <option value="no" selected>No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Coronary Artery Disease</label>
+                    <select id="coronary_artery_disease" name="coronary_artery_disease">
+                        <option value="no" selected>No</option>
+                        <option value="yes">Yes</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>3. Urine Analysis</h2>
+            <div class="grid-layout">
+                <div class="input-group">
+                    <label>Specific Gravity</label>
+                    <select id="specific_gravity" name="specific_gravity">
+                        <option value="1.005">1.005</option>
+                        <option value="1.01">1.010</option>
+                        <option value="1.015" selected>1.015</option>
+                        <option value="1.02">1.020</option>
+                        <option value="1.025">1.025</option>
+                    </select>
+                    <label>Bacteria</label> 
+                    <select id="ba" name="ba">
+                        <option value="notpresent" selected>Not Present</option>
+                        <option value="present">Present</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Albumin (0-5)</label>
+                    <select id="albumin" name="albumin">
+                        <option value="0.0" selected>0</option>
+                        <option value="1.0">1</option>
+                        <option value="2.0">2</option>
+                        <option value="3.0">3</option>
+                        <option value="4.0">4</option>
+                        <option value="5.0">5</option>
+                    </select>
+                    <label>Sugar (0-5)</label>
+                    <select id="sugar" name="sugar">
+                        <option value="0.0" selected>0</option>
+                        <option value="1.0">1</option>
+                        <option value="2.0">2</option>
+                        <option value="3.0">3</option>
+                        <option value="4.0">4</option>
+                        <option value="5.0">5</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Red Blood Cells</label>
+                    <select id="rbc" name="rbc">
+                        <option value="normal" selected>Normal</option>
+                        <option value="abnormal">Abnormal</option>
+                    </select>
+                    <label>Pus Cell / Clumps</label>
+                    <select id="pc" name="pc">
+                        <option value="normal" selected>PC: Normal</option>
+                        <option value="abnormal">PC: Abnormal</option>
+                    </select>
+                    <select id="pcc" name="pcc" style="margin-top: 10px;">
+                        <option value="notpresent" selected>Clumps: Not Present</option>
+                        <option value="present">Clumps: Present</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="section" style="border-bottom: none;">
+            <h2>4. Blood Analysis</h2>
+            <div class="grid-layout">
+                <div class="input-group">
+                    <label>Glucose Random (mg/dl)</label>
+                    <input id="blood_glucose_random" name="blood_glucose_random" type="number" min="20" max="500" placeholder="e.g. 148" required>
+                    <label>Urea (mg/dl)</label>
+                    <input id="blood_urea" name="blood_urea" type="number" min="1" max="400" placeholder="e.g. 57" required>
+                    <label>Serum Creatinine (mg/dl)</label>
+                    <input id="serum_creatinine" name="serum_creatinine" type="number" step="0.01" min="0.1" max="80" placeholder="e.g. 1.2" required>
+                </div>
+                <div class="input-group">
+                    <label>Sodium (mEq/L)</label>
+                    <input id="sodium" name="sodium" type="number" min="100" max="170" placeholder="e.g. 137" required>
+                    <label>Potassium (mEq/L)</label>
+                    <input id="potassium" name="potassium" type="number" step="0.1" min="2.0" max="10.0" placeholder="e.g. 4.6" required>
+                    <label>Hemoglobin (gms)</label>
+                    <input id="hemoglobin" name="hemoglobin" type="number" step="0.1" min="3.0" max="20.0" placeholder="e.g. 12.5" required>
+                </div>
+                <div class="input-group">
+                    <label>PCV (%)</label>
+                    <input id="packed_cell_volume" name="packed_cell_volume" type="number" min="5" max="60" placeholder="e.g. 38" required>
+                    <label>WBC Count (cells/cumm)</label>
+                    <input id="white_blood_cell_count" name="white_blood_cell_count" type="number" min="1000" max="30000" placeholder="e.g. 8400" required>
+                    <label>RBC Count (millions/cmm)</label>
+                    <input id="red_blood_cell_count" name="red_blood_cell_count" type="number" step="0.1" min="1.0" max="10.0" placeholder="e.g. 4.7" required>
+                </div>
+            </div>
+            <button type="submit">GENERATE PREDICTION</button>
+            <div id="result-box"></div>
+        </div>
+    </form>
+    <script>
+    async function predict(event) {
+        event.preventDefault();
+        const resultBox = document.getElementById('result-box');
+        resultBox.style.display = "block";
+        resultBox.style.background = "rgba(255, 255, 255, 0.1)";
+        resultBox.style.color = "white";
+        resultBox.innerText = "Analyzing Clinical Data...";
+        const data = new FormData(event.target);
+        try {
+            const response = await fetch('/Predict/', {
+                method: 'POST',
+                body: data
+            });
+            const result = await response.json();
+            if(response.ok) {
+                if(result.status === "No CKD") {
+                    resultBox.style.backgroundColor = "rgba(0, 255, 100, 0.2)";
+                    resultBox.style.color = "#44ff44";
+                    resultBox.innerHTML = `PREDICTION: NO CKD`;
+                } else {
+                    resultBox.style.backgroundColor = "rgba(255, 50, 50, 0.2)";
+                    resultBox.style.color = "#ff4444";
+                    resultBox.innerHTML = `PREDICTION: CKD DETECTED`;
+                }
+            } else {
+                resultBox.innerText = "Error in analysis. Please verify fields.";
+            }
+        } catch (err) {
+            resultBox.innerText = "Connection error.";
+        }
+    }
+    </script>
+</body>
+</html>
